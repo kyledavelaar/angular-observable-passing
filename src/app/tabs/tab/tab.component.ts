@@ -10,6 +10,7 @@ import { TabsService } from '../tabs.service';
 })
 export class TabComponent implements OnInit {
   tabs;
+  lastSelected: number = 0;
 
   constructor(
     private tabsService: TabsService,
@@ -24,9 +25,14 @@ export class TabComponent implements OnInit {
       return tab['id'] === id;
     })[0];
 
-    console.log('TAB COMP', selectedTab)
+    this.tabsService.selectedTab.next(id === this.lastSelected ? '' : selectedTab);
 
-    this.tabsService.selectedTab.next(selectedTab)
+    //so tab toggles when select same one
+    if (id === this.lastSelected) {
+      this.lastSelected = 0;
+    } else {
+      this.lastSelected = id;
+    }
   }
 
 }
